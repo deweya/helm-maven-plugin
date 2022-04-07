@@ -6,7 +6,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
-@Mojo(name = "helm-repo", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "upgrade", defaultPhase = LifecyclePhase.COMPILE)
 public class HelmRepoMojo extends AbstractMojo {
 
 	@Override
