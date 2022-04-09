@@ -9,9 +9,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "upgrade", defaultPhase = LifecyclePhase.INSTALL)
 public class HelmUpgradeMojo extends AbstractMojo {
+	
+	@Parameter(property = "greeting")
+	private String greeting;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -29,6 +33,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 			while ((s = stderr.readLine()) != null) {
 				System.out.println(s);
 			}
+			
+			System.out.println("By the way, the greeting is " + greeting);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
