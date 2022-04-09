@@ -16,11 +16,18 @@ public class HelmUninstallMojo extends AbstractMojo {
 	@Parameter(property = "releaseName", defaultValue = "${project.name}")
 	private String releaseName;
 	
+	@Parameter(property = "namespace")
+	private String namespace;
+	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Runtime rt = Runtime.getRuntime();
 		
-		String helmUninstall = String.format("helm uninstall %s", releaseName);
+		String namespaceArg = "";
+		if (namespace != null) {
+			namespaceArg = "--namespace " + namespace;
+		}
+		String helmUninstall = String.format("helm uninstall %s %s", releaseName, namespaceArg);
 		try {
 			Process proc = rt.exec(helmUninstall);
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));

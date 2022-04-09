@@ -34,6 +34,9 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	
 	@Parameter(property = "wait")
 	private boolean wait;
+	
+	@Parameter(property = "namespace")
+	private String namespace;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -44,6 +47,7 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		String valuesArgs = "";
 		String setArgs = "";
 		String waitArg = "";
+		String namespaceArg = "";
 		if (values != null) {
 			valuesArgs = values.getValuesArgs();
 			setArgs = values.getSetArgs();
@@ -51,9 +55,12 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		if (wait) {
 			waitArg = "--wait";
 		}
+		if (namespace != null) {
+			namespaceArg = "--namespace " + namespace;
+		}
 		
-		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s %s", 
-				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs, waitArg);
+		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s %s %s", 
+				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs, waitArg, namespaceArg);
 		try {
 			Process proc = rt.exec(helmUpgrade);
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
