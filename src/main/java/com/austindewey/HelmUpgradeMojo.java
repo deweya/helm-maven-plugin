@@ -30,23 +30,11 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		Runtime rt = Runtime.getRuntime();
 		
 		for (Chart chart : charts) {
-			// Install chart
-			StringBuilder values = new StringBuilder();
-			if (chart.getValues() != null && chart.getValues().getFiles() != null) {
-				for (String file : chart.getValues().getFiles()) {
-					values.append(String.format("--values %s ", file));
-				}
-			}
-			
-			StringBuilder set = new StringBuilder();
-			if (chart.getValues() != null && chart.getValues().getSet() != null) {
-				for (Map.Entry<String,String> entry : chart.getValues().getSet().entrySet()) {
-					set.append(String.format("--set %s=\"%s\" ", entry.getKey(), entry.getValue()));
-				}
-			}
+			String valuesArgs = chart.getValuesArgs();
+			String setArgs = chart.getSetArgs();
 			
 			String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
-					chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), values.toString(), set.toString());
+					chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), valuesArgs, setArgs);
 			try {
 				Process proc = rt.exec(helmUpgrade);
 				BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
