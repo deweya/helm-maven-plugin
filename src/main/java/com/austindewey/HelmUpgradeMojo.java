@@ -27,32 +27,33 @@ public class HelmUpgradeMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		Runtime rt = Runtime.getRuntime();
+		
 		String helmDir = String.format("%s/helm", getTargetDir(project));
 		if (createHelmFolder(helmDir)) {
 			getLog().info("Created helm folder at: " + helmDir);
 		}
 		
-		/*
-		Runtime rt = Runtime.getRuntime();
-		try {
-			Process proc = rt.exec("helm version");
-			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-			BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-			
-			String s;
-			while ((s = stdin.readLine()) != null) {
-				System.out.println(s);
+		for (Chart chart : charts) {
+			getLog().info(String.format("Pulling chart %s, version %s from repository %s", chart.getName(), chart.getVersion(), chart.getRepository().getUrl()));
+			String[] args = {"helm", "pull", chart.getName(), "--version", chart.getVersion(), "--repo", chart.getRepository().getUrl(), "--destination", helmDir};
+			try {
+				Process proc = rt.exec(args);
+				BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+				BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+				
+				String s;
+				while ((s = stdin.readLine()) != null) {
+					System.out.println(s);
+				}
+				
+				while ((s = stderr.readLine()) != null) {
+					System.out.println(s);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
-			while ((s = stderr.readLine()) != null) {
-				System.out.println(s);
-			}
-			
-			System.out.println("By the way, the charts is " + charts.size());
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		*/
 	}
 	
 	private String getTargetDir(MavenProject project) {
