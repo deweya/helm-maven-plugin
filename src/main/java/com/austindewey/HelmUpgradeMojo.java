@@ -35,6 +35,7 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		}
 		
 		for (Chart chart : charts) {
+			// Pull chart
 			getLog().info(String.format("Pulling chart %s, version %s from repository %s", chart.getName(), chart.getVersion(), chart.getRepository().getUrl()));
 			String[] args = {"helm", "pull", chart.getName(), "--version", chart.getVersion(), "--repo", chart.getRepository().getUrl(), "--destination", helmDir};
 			try {
@@ -53,6 +54,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			// Install chart
 		}
 	}
 	
