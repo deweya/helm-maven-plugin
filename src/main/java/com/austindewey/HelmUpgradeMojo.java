@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -29,17 +30,26 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Runtime rt = Runtime.getRuntime();
 		
-		String helmDir = String.format("%s/helm", getTargetDir(project));
-		if (createHelmFolder(helmDir)) {
-			getLog().info("Created helm folder at: " + helmDir);
-		}
-		
 		for (Chart chart : charts) {
-			// Pull chart
-			getLog().info(String.format("Pulling chart %s, version %s from repository %s", chart.getName(), chart.getVersion(), chart.getRepository().getUrl()));
-			String[] args = {"helm", "pull", chart.getName(), "--version", chart.getVersion(), "--repo", chart.getRepository().getUrl(), "--destination", helmDir};
+			// Install chart
+			StringBuilder values = new StringBuilder();
+			if (chart.getValues() != null && chart.getValues().getFiles() != null) {
+				for (String file : chart.getValues().getFiles()) {
+					values.append(String.format("--values %s ", file));
+				}
+			}
+			
+			StringBuilder set = new StringBuilder();
+			if (chart.getValues() != null && chart.getValues().getSet() != null) {
+				for (Map.Entry<String,String> entry : chart.getValues().getSet().entrySet()) {
+					set.append(String.format("--set %s=\"%s\" ", entry.getKey(), entry.getValue()));
+				}
+			}
+			
+			String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
+					chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), values.toString(), set.toString());
 			try {
-				Process proc = rt.exec(args);
+				Process proc = rt.exec(helmUpgrade);
 				BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 				BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 				
@@ -54,16 +64,6 @@ public class HelmUpgradeMojo extends AbstractMojo {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			// Install chart
 		}
-	}
-	
-	private String getTargetDir(MavenProject project) {
-		return project.getModel().getBuild().getDirectory();
-	}
-	
-	private boolean createHelmFolder(String helmDir) {
-		return new File(helmDir).mkdirs();
 	}
 }
