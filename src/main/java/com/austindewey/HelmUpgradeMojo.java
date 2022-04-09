@@ -31,6 +31,9 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	
 	@Parameter(property = "values")
 	private Values values;
+	
+	@Parameter(property = "wait")
+	private boolean wait;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -38,13 +41,17 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		
 		String valuesArgs = "";
 		String setArgs = "";
+		String waitArg = "";
 		if (values != null) {
 			valuesArgs = values.getValuesArgs();
 			setArgs = values.getSetArgs();
 		}
+		if (wait) {
+			waitArg = "--wait";
+		}
 		
-		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
-				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs);
+		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s %s", 
+				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs, waitArg);
 		try {
 			Process proc = rt.exec(helmUpgrade);
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
