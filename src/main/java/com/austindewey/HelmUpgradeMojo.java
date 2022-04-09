@@ -37,6 +37,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		chart.validate();
+		
 		Runtime rt = Runtime.getRuntime();
 		
 		String valuesArgs = "";

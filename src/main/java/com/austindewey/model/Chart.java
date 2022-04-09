@@ -1,5 +1,7 @@
 package com.austindewey.model;
 
+import org.apache.maven.plugin.MojoExecutionException;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,4 +13,17 @@ public class Chart {
 	private String name;
 	private String version;
 	private Repository repository;
+	
+	public void validate() throws MojoExecutionException {
+		if (name == null) {
+			throw new MojoExecutionException("\"chart.name\" must not be null");
+		}
+		if (version == null) {
+			throw new MojoExecutionException("\"chart.version\" must not be null");
+		}
+		if (repository == null) {
+			throw new MojoExecutionException("\"chart.repository\" must not be null");
+		}
+		repository.validate();
+	}
 }
