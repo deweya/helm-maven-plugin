@@ -13,4 +13,24 @@ public class Values {
 
 	private List<String> files;
 	private Map<String,String> set;
+	
+	public String getValuesArgs() {
+		StringBuilder values = new StringBuilder();
+		if (getFiles() != null) {
+			for (String file : getFiles()) {
+				values.append(String.format("--values %s ", file));
+			}
+		}
+		return values.toString();
+	}
+	
+	public String getSetArgs() {
+		StringBuilder set = new StringBuilder();
+		if (getSet() != null) {
+			for (Map.Entry<String,String> entry : getSet().entrySet()) {
+				set.append(String.format("--set %s=\"%s\" ", entry.getKey(), entry.getValue()));
+			}
+		}
+		return set.toString();
+	}
 }

@@ -15,6 +15,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import com.austindewey.model.Chart;
+import com.austindewey.model.Values;
 
 @Mojo(name = "upgrade", defaultPhase = LifecyclePhase.INSTALL)
 public class HelmUpgradeMojo extends AbstractMojo {
@@ -22,35 +23,40 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	private MavenProject project;
 	
-	@Parameter(property = "charts", required = true)
-	private List<Chart> charts;
+	@Parameter(property = "chart", required = true)
+	private Chart chart;
+	
+	@Parameter(property = "values")
+	private Values values;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Runtime rt = Runtime.getRuntime();
 		
-		for (Chart chart : charts) {
-			String valuesArgs = chart.getValuesArgs();
-			String setArgs = chart.getSetArgs();
+		String valuesArgs = "";
+		String setArgs = "";
+		if (values != null) {
+			valuesArgs = values.getValuesArgs();
+			setArgs = values.getSetArgs();
+		}
+		
+		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
+				chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), valuesArgs, setArgs);
+		try {
+			Process proc = rt.exec(helmUpgrade);
+			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 			
-			String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
-					chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), valuesArgs, setArgs);
-			try {
-				Process proc = rt.exec(helmUpgrade);
-				BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-				BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-				
-				String s;
-				while ((s = stdin.readLine()) != null) {
-					System.out.println(s);
-				}
-				
-				while ((s = stderr.readLine()) != null) {
-					System.out.println(s);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			String s;
+			while ((s = stdin.readLine()) != null) {
+				System.out.println(s);
 			}
+			
+			while ((s = stderr.readLine()) != null) {
+				System.out.println(s);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
