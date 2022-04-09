@@ -23,6 +23,9 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	private MavenProject project;
 	
+	@Parameter(property = "releaseName", defaultValue = "${project.name}")
+	private String releaseName;
+	
 	@Parameter(property = "chart", required = true)
 	private Chart chart;
 	
@@ -41,7 +44,7 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		}
 		
 		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s", 
-				chart.getRepository().getUrl(), project.getName(), chart.getName(), chart.getVersion(), valuesArgs, setArgs);
+				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs);
 		try {
 			Process proc = rt.exec(helmUpgrade);
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));

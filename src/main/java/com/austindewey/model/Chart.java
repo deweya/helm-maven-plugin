@@ -1,7 +1,5 @@
 package com.austindewey.model;
 
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
