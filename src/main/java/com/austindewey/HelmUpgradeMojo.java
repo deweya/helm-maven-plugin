@@ -3,6 +3,7 @@ package com.austindewey;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -11,11 +12,13 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import com.austindewey.model.Chart;
+
 @Mojo(name = "upgrade", defaultPhase = LifecyclePhase.INSTALL)
 public class HelmUpgradeMojo extends AbstractMojo {
 	
-	@Parameter(property = "greeting")
-	private String greeting;
+	@Parameter(property = "charts", required = true)
+	private List<Chart> charts;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -34,7 +37,7 @@ public class HelmUpgradeMojo extends AbstractMojo {
 				System.out.println(s);
 			}
 			
-			System.out.println("By the way, the greeting is " + greeting);
+			System.out.println("By the way, the charts is " + charts.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
