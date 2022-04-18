@@ -14,8 +14,8 @@ public class Repository {
 	private String url;
 	
 	public void validate() throws MojoExecutionException {
-		if (url == null) {
-			throw new MojoExecutionException("\"repository.url\" must not be null");
+		if (name == null && url == null) {
+			throw new MojoExecutionException("either \"repository.name\" or \"repository.url\" must be defined");
 		}
 	}
 	

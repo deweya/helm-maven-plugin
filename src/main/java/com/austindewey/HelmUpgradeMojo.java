@@ -64,16 +64,28 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		}
 		
 		String helmUpgrade = "";
-		String url = chart.getRepository().getUrl().toLowerCase();
+		String url = chart.getRepository().getUrl();
+		if (url != null) {
+			url = url.toLowerCase();
+		} else {
+			url = "";
+		}
+		// Install from http(s) repository
 		if (url.contains("https://") || url.contains("http://")) {
 			helmUpgrade = String.format("helm upgrade --install --repo %s %s %s %s %s %s %s %s", 
 					url, releaseName, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
+		// Install from oci registry
 		} else if (url.contains("oci://")) {
 			helmUpgrade = String.format("helm upgrade --install %s %s/%s %s %s %s %s %s", 
 					releaseName, url, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
-		} else {
+		// Install from local file
+		} else if (chart.getRepository().getUrl() != null) {
 			helmUpgrade = String.format("helm upgrade --install %s %s %s %s %s %s", 
 					releaseName, url, valuesArgs, setArgs, waitArg, namespaceArg);
+		// Install from an already-existing repository (added previously from "helm repo add")
+		} else if (chart.getRepository().getName() != null) {
+			helmUpgrade = String.format("helm upgrade --install %s %s/%s %s %s %s %s",
+					releaseName, chart.getRepository().getName(), chart.getName(), valuesArgs, setArgs, waitArg, namespaceArg);
 		}
 
 		try {
