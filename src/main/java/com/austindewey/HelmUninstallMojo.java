@@ -1,14 +1,12 @@
 package com.austindewey;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import com.austindewey.helm.UninstallCommand;
 
 @Mojo(name = "uninstall")
 public class HelmUninstallMojo extends AbstractMojo {
@@ -19,30 +17,15 @@ public class HelmUninstallMojo extends AbstractMojo {
 	@Parameter(property = "namespace")
 	private String namespace;
 	
+	@Parameter(property = "wait")
+	private boolean wait;
+	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		Runtime rt = Runtime.getRuntime();
-		
-		String namespaceArg = "";
-		if (namespace != null) {
-			namespaceArg = "--namespace " + namespace;
-		}
-		String helmUninstall = String.format("helm uninstall %s %s", releaseName, namespaceArg);
-		try {
-			Process proc = rt.exec(helmUninstall);
-			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-			BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-			
-			String s;
-			while ((s = stdin.readLine()) != null) {
-				System.out.println(s);
-			}
-			
-			while ((s = stderr.readLine()) != null) {
-				System.out.println(s);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		new UninstallCommand.Builder(releaseName)
+				.namespace(namespace)
+				.wait(wait)
+				.build()
+				.execute();
 	}
 }

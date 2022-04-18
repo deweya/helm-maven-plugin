@@ -1,8 +1,7 @@
 package com.austindewey;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -12,6 +11,10 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import com.austindewey.helm.UpgradeFromAddedRepositoryCommand;
+import com.austindewey.helm.UpgradeFromHttpRepositoryCommand;
+import com.austindewey.helm.UpgradeFromLocalChartCommand;
+import com.austindewey.helm.UpgradeFromOciRegistryCommand;
 import com.austindewey.model.Chart;
 import com.austindewey.model.Values;
 
@@ -40,67 +43,62 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		chart.validate();
 		
-		Runtime rt = Runtime.getRuntime();
+		List<String> valuesFiles = null;
+		Map<String,String> inlineValues = null;
 		
-		String valuesArgs = "";
-		String setArgs = "";
-		String waitArg = "";
-		String namespaceArg = "";
-		String versionArg = "";
 		if (values != null) {
-			valuesArgs = values.getValuesArgs();
-			setArgs = values.getSetArgs();
-		}
-		if (wait) {
-			waitArg = "--wait";
-		}
-		if (namespace != null) {
-			namespaceArg = "--namespace " + namespace;
-		}
-		if (chart.getVersion() != null) {
-			versionArg = "--version " + chart.getVersion();
+			valuesFiles = values.getFiles();
+			inlineValues = values.getSet();
 		}
 		
-		String helmUpgrade = "";
-		String url = chart.getRepository().getUrl();
-		if (url != null) {
-			url = url.toLowerCase();
-		} else {
-			url = "";
+		String chartName = chart.getName();
+		String repositoryUrl = chart.getRepository().getUrl();
+		String repositoryName = chart.getRepository().getName();
+		String chartVersion = chart.getVersion();
+		
+		switch (chart.getUpgradeType()) {
+		case UPGRADE_FROM_HTTP_REPOSITORY:
+			new UpgradeFromHttpRepositoryCommand.Builder(releaseName, chartName, repositoryUrl)
+					.inlineValues(inlineValues)
+					.valuesFiles(valuesFiles)
+					.version(chartVersion)
+					.wait(wait)
+					.namespace(namespace)
+					.build()
+					.execute();
+			break;
+		case UPGRADE_FROM_OCI_REGISTRY:
+			new UpgradeFromOciRegistryCommand.Builder(releaseName, chartName, repositoryUrl)
+					.inlineValues(inlineValues)
+					.valuesFiles(valuesFiles)
+					.version(chartVersion)
+					.wait(wait)
+					.namespace(namespace)
+					.build()
+					.execute();
+			break;
+		case UPGRADE_FROM_ADDED_REPOSITORY:
+			new UpgradeFromAddedRepositoryCommand.Builder(releaseName, chartName, repositoryName)
+					.inlineValues(inlineValues)
+					.valuesFiles(valuesFiles)
+					.version(chartVersion)
+					.wait(wait)
+					.namespace(namespace)
+					.build()
+					.execute();
+			break;
+		case UPGRADE_FROM_LOCAL:
+			new UpgradeFromLocalChartCommand.Builder(releaseName, repositoryUrl)
+					.inlineValues(inlineValues)
+					.valuesFiles(valuesFiles)
+					.wait(wait)
+					.namespace(namespace)
+					.build()
+					.execute();
+			break;
+		default:
+			break;
 		}
-		// Install from http(s) repository
-		if (url.contains("https://") || url.contains("http://")) {
-			helmUpgrade = String.format("helm upgrade --install --repo %s %s %s %s %s %s %s %s", 
-					url, releaseName, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
-		// Install from oci registry
-		} else if (url.contains("oci://")) {
-			helmUpgrade = String.format("helm upgrade --install %s %s/%s %s %s %s %s %s", 
-					releaseName, url, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
-		// Install from local file
-		} else if (chart.getRepository().getUrl() != null) {
-			helmUpgrade = String.format("helm upgrade --install %s %s %s %s %s %s", 
-					releaseName, url, valuesArgs, setArgs, waitArg, namespaceArg);
-		// Install from an already-existing repository (added previously from "helm repo add")
-		} else if (chart.getRepository().getName() != null) {
-			helmUpgrade = String.format("helm upgrade --install %s %s/%s %s %s %s %s",
-					releaseName, chart.getRepository().getName(), chart.getName(), valuesArgs, setArgs, waitArg, namespaceArg);
-		}
-
-		try {
-			Process proc = rt.exec(helmUpgrade);
-			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-			BufferedReader stderr = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-			
-			String s;
-			while ((s = stdin.readLine()) != null) {
-				System.out.println(s);
-			}
-			
-			while ((s = stderr.readLine()) != null) {
-				System.out.println(s);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 	}
 }
