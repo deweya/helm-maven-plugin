@@ -16,10 +16,12 @@ public class Chart {
 	
 	public void validate() throws MojoExecutionException {
 		if (name == null) {
-			throw new MojoExecutionException("\"chart.name\" must not be null");
-		}
-		if (version == null) {
-			throw new MojoExecutionException("\"chart.version\" must not be null");
+			if (repository.getUrl().toLowerCase().contains("https://") ||
+			    repository.getUrl().toLowerCase().contains("http://")  ||
+			    repository.getUrl().toLowerCase().contains("oci://")) {
+
+				throw new MojoExecutionException("\"chart.name\" must not be null");
+			}
 		}
 		if (repository == null) {
 			throw new MojoExecutionException("\"chart.repository\" must not be null");

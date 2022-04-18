@@ -48,6 +48,7 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		String setArgs = "";
 		String waitArg = "";
 		String namespaceArg = "";
+		String versionArg = "";
 		if (values != null) {
 			valuesArgs = values.getValuesArgs();
 			setArgs = values.getSetArgs();
@@ -58,9 +59,23 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		if (namespace != null) {
 			namespaceArg = "--namespace " + namespace;
 		}
+		if (chart.getVersion() != null) {
+			versionArg = "--version " + chart.getVersion();
+		}
 		
-		String helmUpgrade = String.format("helm upgrade --install --repo %s %s %s --version %s %s %s %s %s", 
-				chart.getRepository().getUrl(), releaseName, chart.getName(), chart.getVersion(), valuesArgs, setArgs, waitArg, namespaceArg);
+		String helmUpgrade = "";
+		String url = chart.getRepository().getUrl().toLowerCase();
+		if (url.contains("https://") || url.contains("http://")) {
+			helmUpgrade = String.format("helm upgrade --install --repo %s %s %s %s %s %s %s %s", 
+					url, releaseName, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
+		} else if (url.contains("oci://")) {
+			helmUpgrade = String.format("helm upgrade --install %s %s/%s %s %s %s %s %s", 
+					releaseName, url, chart.getName(), versionArg, valuesArgs, setArgs, waitArg, namespaceArg);
+		} else {
+			helmUpgrade = String.format("helm upgrade --install %s %s %s %s %s %s", 
+					releaseName, url, valuesArgs, setArgs, waitArg, namespaceArg);
+		}
+
 		try {
 			Process proc = rt.exec(helmUpgrade);
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
