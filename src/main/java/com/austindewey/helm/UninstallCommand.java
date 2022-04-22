@@ -8,7 +8,7 @@ public class UninstallCommand extends BaseCommand {
 	
 	@Override
 	String createCommand() {
-		String command = String.format("helm uninstall %s", releaseName);
+		String command = String.format("helm uninstall %s ", releaseName);
 		command += addCommonFlags();
 		
 		return command;

@@ -19,7 +19,7 @@ public class Chart {
 	}
 	
 	public CommandType getUpgradeType() {
-		if (repository.getUrl() != null && name != null) {
+		if (repository.getUrl() != null) {
 			String r = repository.getUrl().toLowerCase();
 			if (r.contains("https://") || r.contains("http://")) {
 				return CommandType.UPGRADE_FROM_HTTP_REPOSITORY;
@@ -29,7 +29,7 @@ public class Chart {
 			}
 		}
 		
-		if (repository.getName() != null && name != null) {
+		if (repository.getName() != null) {
 			return CommandType.UPGRADE_FROM_ADDED_REPOSITORY;
 		}
 		
@@ -37,17 +37,26 @@ public class Chart {
 	}
 	
 	public void validate() throws MojoExecutionException {
-		if (name == null) {
-			if (repository.getUrl().toLowerCase().contains("https://") ||
-			    repository.getUrl().toLowerCase().contains("http://")  ||
-			    repository.getUrl().toLowerCase().contains("oci://")) {
-
-				throw new MojoExecutionException("\"chart.name\" must not be null");
-			}
-		}
 		if (repository == null) {
 			throw new MojoExecutionException("\"chart.repository\" must not be null");
 		}
+		
+		CommandType type = getUpgradeType();
+		if (type == CommandType.UPGRADE_FROM_HTTP_REPOSITORY ||
+			type == CommandType.UPGRADE_FROM_OCI_REGISTRY || 
+			type == CommandType.UPGRADE_FROM_ADDED_REPOSITORY) {
+			
+			if (name == null) {
+				throw new MojoExecutionException("\"chart.name\" must not be null");
+			}
+		}
+		
+		if (type == CommandType.UPGRADE_FROM_LOCAL) {
+			if (name != null) {
+				throw new MojoExecutionException("\"chart.name\" is not supported for local chart paths. Remove \"chart.name\" from your configuration");
+			}
+		}
+		
 		repository.validate();
 	}
 	

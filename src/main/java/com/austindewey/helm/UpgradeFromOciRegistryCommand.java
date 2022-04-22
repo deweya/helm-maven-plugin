@@ -15,7 +15,7 @@ public class UpgradeFromOciRegistryCommand extends BaseUpgradeCommand {
 
 	@Override
 	String createCommand() {
-		String command = String.format("helm upgrade --install %s %s/%s", releaseName, url, chartName);
+		String command = String.format("helm upgrade --install %s %s/%s ", releaseName, url, chartName);
 		if (version != null) {
 			command += String.format("--version %s ", version);
 		}

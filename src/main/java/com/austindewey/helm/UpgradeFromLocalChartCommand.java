@@ -11,7 +11,7 @@ public class UpgradeFromLocalChartCommand extends BaseUpgradeCommand {
 	
 	@Override
 	String createCommand() {
-		String command = String.format("helm upgrade --install %s %s", releaseName, localPath);
+		String command = String.format("helm upgrade --install %s %s ", releaseName, localPath);
 		command += addUpgradeFlags();
 		
 		return command;

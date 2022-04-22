@@ -15,7 +15,7 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 	
 	@Override
 	String createCommand() {
-		String command = String.format("helm upgrade --install %s %s/%s", releaseName, repositoryName, chartName);
+		String command = String.format("helm upgrade --install %s %s/%s ", releaseName, repositoryName, chartName);
 		if (version != null) {
 			command += String.format("--version %s ", version);
 		}
