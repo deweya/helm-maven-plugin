@@ -1,7 +1,6 @@
 package com.austindewey.helm;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -44,11 +43,16 @@ public abstract class BaseCommand {
 				System.out.println(s);
 			}
 			
-			while ((s = stderr.readLine()) != null) {
-				System.out.println(s);
+			proc.waitFor();
+			if (proc.exitValue() != 0) {
+				String errMsg = "";
+				while ((s = stderr.readLine()) != null) {
+					errMsg += s;
+				}
+				throw new MojoExecutionException(errMsg);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new MojoExecutionException(e);
-		}
+		} 
 	}
 }
