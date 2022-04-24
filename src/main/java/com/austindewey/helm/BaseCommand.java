@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.maven.plugin.MojoExecutionException;
+
 public abstract class BaseCommand {
 
 	final String releaseName;
@@ -31,7 +33,7 @@ public abstract class BaseCommand {
 		return flags;
 	}
 	
-	public void execute() {
+	public void execute() throws MojoExecutionException {
 		try {
 			Process proc = Runtime.getRuntime().exec(createCommand());
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -46,7 +48,7 @@ public abstract class BaseCommand {
 				System.out.println(s);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new MojoExecutionException(e);
 		}
 	}
 }
