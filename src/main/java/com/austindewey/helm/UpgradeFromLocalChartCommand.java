@@ -32,13 +32,7 @@ public class UpgradeFromLocalChartCommand extends BaseUpgradeCommand {
 		}
 		
 		public UpgradeFromLocalChartCommand build() {
-			UpgradeFromLocalChartCommand command = new UpgradeFromLocalChartCommand(this);
-			validate(command);
-			return command;
-		}
-		
-		private void validate(UpgradeFromLocalChartCommand command) {
-			
+			return new UpgradeFromLocalChartCommand(this);
 		}
 	}
 }

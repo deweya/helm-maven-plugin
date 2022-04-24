@@ -47,13 +47,7 @@ public class UpgradeFromOciRegistryCommand extends BaseUpgradeCommand {
 		}
 		
 		public UpgradeFromOciRegistryCommand build() {
-			UpgradeFromOciRegistryCommand command = new UpgradeFromOciRegistryCommand(this);
-			validate(command);
-			return command;
-		}
-		
-		private void validate(UpgradeFromOciRegistryCommand command) {
-			
+			return new UpgradeFromOciRegistryCommand(this);
 		}
 	}
 }

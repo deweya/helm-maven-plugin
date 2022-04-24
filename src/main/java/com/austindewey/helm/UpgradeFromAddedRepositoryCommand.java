@@ -47,13 +47,7 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 		}
 		
 		public UpgradeFromAddedRepositoryCommand build() {
-			UpgradeFromAddedRepositoryCommand command = new UpgradeFromAddedRepositoryCommand(this);
-			validate(command);
-			return command;
-		}
-		
-		private void validate(UpgradeFromAddedRepositoryCommand command) {
-			
+			return new UpgradeFromAddedRepositoryCommand(this);
 		}
 	}
 }
