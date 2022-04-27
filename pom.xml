@@ -7,8 +7,33 @@
   <packaging>maven-plugin</packaging>
   <version>0.0.1-SNAPSHOT</version>
   
-  <name>helm-maven-plugin Maven Mojo</name>
+  <name>Helm Maven Plugin</name>
+  <description>A Maven plugin used for installing a Helm chart from a specified Helm repository to Kubernetes</description>
   <url>https://github.com/deweya/helm-maven-plugin</url>
+  
+  <issueManagement>
+  	<system>github</system>
+  	<url>https://github.com/deweya/helm-maven-plugin/issues</url>
+  </issueManagement>
+  
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+    <connection>scm:git:https://github.com/deweya/helm-maven-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/deweya/helm-maven-plugin.git</developerConnection>
+    <url>https://github.com/deweya/helm-maven-plugin</url>
+  </scm>
+  
+  <organization>
+    <name>Austin Dewey</name>
+    <url>https://austindewey.com</url>
+  </organization>
   
   <properties>
   	<maven.compiler.target>1.8</maven.compiler.target>
@@ -47,6 +72,26 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.0</version>
 	  </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.12.0</version>
+      </plugin>
     </plugins>
   </build>
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.6.4</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.2.2</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
