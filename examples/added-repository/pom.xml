@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.austindewey</groupId>
+  <artifactId>example</artifactId>
+  <packaging>pom</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.austindewey</groupId>
+        <artifactId>helm-maven-plugin</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <configuration>
+          <releaseName>example</releaseName>
+          <chart>
+            <name>nginx</name>
+            <version>9.7.6</version>
+            <repository>
+              <!-- Be sure to add the "bitnami" repository first by running "helm repo add bitnami https://charts.bitnami.com/bitnami" -->
+              <name>bitnami</name>
+            </repository>
+          </chart>
+          <namespace>default</namespace>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>upgrade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
