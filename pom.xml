@@ -30,6 +30,13 @@
     <url>https://github.com/deweya/helm-maven-plugin</url>
   </scm>
   
+  <developers>
+    <developer>
+      <name>Austin Dewey (deweya)</name>
+      <email>deweya964@gmail.com</email>
+    </developer>
+  </developers>
+  
   <organization>
     <name>Austin Dewey</name>
     <url>https://austindewey.com</url>
