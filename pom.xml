@@ -8,7 +8,7 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <name>Helm Maven Plugin</name>
-  <description>A Maven plugin used for installing a Helm chart from a specified Helm repository to Kubernetes</description>
+  <description>A Maven plugin used for installing a Helm chart from a Helm repository to Kubernetes</description>
   <url>https://github.com/deweya/helm-maven-plugin</url>
   
   <issueManagement>
