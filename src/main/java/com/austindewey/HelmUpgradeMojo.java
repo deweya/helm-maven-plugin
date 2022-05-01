@@ -18,24 +18,45 @@ import com.austindewey.helm.UpgradeFromOciRegistryCommand;
 import com.austindewey.model.Chart;
 import com.austindewey.model.Values;
 
+/**
+ * Install/Upgrade a Helm chart to Kubernetes.
+ * This is equivalent to passing "helm upgrade --install" from the Helm CLI
+ * 
+ * @author Austin Dewey
+ */
 @Mojo(name = "upgrade", defaultPhase = LifecyclePhase.INSTALL)
 public class HelmUpgradeMojo extends AbstractMojo {
-	
+
 	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	private MavenProject project;
 	
+	/**
+	 * The Helm release name
+	 */
 	@Parameter(property = "releaseName", defaultValue = "${project.name}")
 	private String releaseName;
 	
+	/**
+	 * The target Helm chart and repository information
+	 */
 	@Parameter(property = "chart", required = true)
 	private Chart chart;
 	
+	/**
+	 * Helm values files and/or inline values
+	 */
 	@Parameter(property = "values")
 	private Values values;
 	
+	/**
+	 * Wait for the Helm installation/upgrade to complete
+	 */
 	@Parameter(property = "wait")
 	private boolean wait;
 	
+	/**
+	 * The target Kubernetes namespace
+	 */
 	@Parameter(property = "namespace")
 	private String namespace;
 

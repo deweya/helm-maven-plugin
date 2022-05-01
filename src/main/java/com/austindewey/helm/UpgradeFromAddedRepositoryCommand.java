@@ -1,5 +1,10 @@
 package com.austindewey.helm;
 
+/**
+ * An implementation of Helm upgrade when referencing a chart from a locally added repository (from <i>helm repo add</i>)
+ * 
+ * @author Austin Dewey
+ */
 public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 
 	private final String chartName;

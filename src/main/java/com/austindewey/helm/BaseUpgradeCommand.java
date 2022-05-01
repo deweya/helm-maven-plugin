@@ -3,9 +3,22 @@ package com.austindewey.helm;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The base Helm upgrade command class
+ * 
+ * @author Austin Dewey
+ *
+ */
 public abstract class BaseUpgradeCommand extends BaseCommand {
 
+	/**
+	 * A list of values files
+	 */
 	final List<String> valuesFiles;
+	
+	/**
+	 * A mapping of inline values (Helm's --set flag)
+	 */
 	final Map<String,String> inlineValues;
 	
 	public BaseUpgradeCommand(String releaseName, List<String> valuesFiles, Map<String,String> inlineValues, boolean wait, String namespace) {
@@ -14,6 +27,11 @@ public abstract class BaseUpgradeCommand extends BaseCommand {
 		this.inlineValues = inlineValues;
 	}
 	
+	/**
+	 * A common set of Helm upgrade flags
+	 * 
+	 * @return Common Helm upgrade flags
+	 */
 	String addUpgradeFlags() {
 		String flags = "";
 		

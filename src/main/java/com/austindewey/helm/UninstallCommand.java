@@ -1,5 +1,10 @@
 package com.austindewey.helm;
 
+/**
+ * The Helm uninstall implementation
+ * 
+ * @author Austin Dewey
+ */
 public class UninstallCommand extends BaseCommand {
 
 	private UninstallCommand(Builder builder) {

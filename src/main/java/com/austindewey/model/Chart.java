@@ -4,6 +4,12 @@ import org.apache.maven.plugin.MojoExecutionException;
 
 import com.austindewey.helm.CommandType;
 
+/**
+ * Represents a Helm chart
+ * 
+ * @author Austin Dewey
+ *
+ */
 public class Chart {
 	
 	private String name;
@@ -18,6 +24,11 @@ public class Chart {
 		this.repository = repository;
 	}
 	
+	/**
+	 * Deduces the type of Helm upgrade needed based on user input
+	 * 
+	 * @return The type of Helm upgrade (CommandType)
+	 */
 	public CommandType getUpgradeType() {
 		if (repository.getUrl() != null) {
 			String r = repository.getUrl().toLowerCase();
@@ -36,6 +47,11 @@ public class Chart {
 		return CommandType.UPGRADE_FROM_LOCAL;
 	}
 	
+	/**
+	 * Validates the chart object
+	 * 
+	 * @throws MojoExecutionException
+	 */
 	public void validate() throws MojoExecutionException {
 		if (repository == null) {
 			throw new MojoExecutionException("\"chart.repository\" must not be null");

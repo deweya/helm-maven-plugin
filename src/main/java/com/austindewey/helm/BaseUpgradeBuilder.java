@@ -3,6 +3,12 @@ package com.austindewey.helm;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A builder object used to build different Helm upgrade commands
+ * 
+ * @author Austin Dewey
+ * @param <T> The type of Helm upgrade builder
+ */
 public abstract class BaseUpgradeBuilder<T> extends BaseBuilder<T> {
 	
 	private T builder;

@@ -1,5 +1,10 @@
 package com.austindewey.helm;
 
+/**
+ * An implementation of Helm upgrade when referencing a chart from the local file system
+ * 
+ * @author Austin Dewey
+ */
 public class UpgradeFromLocalChartCommand extends BaseUpgradeCommand {
 
 	private final String localPath;

@@ -8,15 +8,29 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import com.austindewey.helm.UninstallCommand;
 
+/**
+ * Uninstall a Helm release. This is the equivalent of passing "helm uninstall" from the Helm CLI
+ * 
+ * @author Austin Dewey
+ */
 @Mojo(name = "uninstall")
 public class HelmUninstallMojo extends AbstractMojo {
 
+	/**
+	 * The Helm release name
+	 */
 	@Parameter(property = "releaseName", defaultValue = "${project.name}")
 	private String releaseName;
 	
+	/**
+	 * The target Kubernetes namespace
+	 */
 	@Parameter(property = "namespace")
 	private String namespace;
 	
+	/**
+	 * Wait for the uninstall operation to complete
+	 */
 	@Parameter(property = "wait")
 	private boolean wait;
 	

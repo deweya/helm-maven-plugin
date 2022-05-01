@@ -1,5 +1,12 @@
 package com.austindewey.helm;
 
+/**
+ * Base builder object
+ * Contains the common set of fields for all Helm command builders
+ * 
+ * @author Austin Dewey
+ * @param <T> The type of builder
+ */
 public abstract class BaseBuilder<T> {
 	
 	private T builder;

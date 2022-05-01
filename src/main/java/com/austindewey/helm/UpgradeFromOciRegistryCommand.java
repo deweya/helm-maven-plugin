@@ -1,5 +1,10 @@
 package com.austindewey.helm;
 
+/**
+ * An implementation of Helm upgrade when referencing a chart from an OCI registry
+ * 
+ * @author Austin Dewey
+ */
 public class UpgradeFromOciRegistryCommand extends BaseUpgradeCommand {
 	
 	private final String chartName;

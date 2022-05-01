@@ -5,6 +5,11 @@ import java.io.InputStreamReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
 
+/**
+ * The base command used to execute inheriting Helm commands
+ * 
+ * @author Austin Dewey
+ */
 public abstract class BaseCommand {
 
 	final String releaseName;
@@ -17,8 +22,18 @@ public abstract class BaseCommand {
 		this.wait = wait;
 	}
 	
+	/**
+	 * Generates the Helm command string for the implementing class
+	 * 
+	 * @return The Helm command string
+	 */
 	abstract String createCommand();
 	
+	/**
+	 * Adds a common set of flags applicable to all Helm commands
+	 * 
+	 * @return The common set of Helm flags
+	 */
 	String addCommonFlags() {
 		String flags = "";
 		
@@ -32,6 +47,11 @@ public abstract class BaseCommand {
 		return flags;
 	}
 	
+	/**
+	 * Execute the Helm command. Displays all output to the command line and returns a MojoExecutionException for Helm failures.
+	 * 
+	 * @throws MojoExecutionException
+	 */
 	public void execute() throws MojoExecutionException {
 		try {
 			Process proc = Runtime.getRuntime().exec(createCommand());

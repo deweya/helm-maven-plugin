@@ -3,6 +3,12 @@ package com.austindewey.model;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents Helm values files and inline values to be applied with the Helm chart
+ * 
+ * @author Austin Dewey
+ *
+ */
 public class Values {
 
 	private List<String> files;
