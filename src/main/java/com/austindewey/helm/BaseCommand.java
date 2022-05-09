@@ -50,7 +50,7 @@ public abstract class BaseCommand {
 	/**
 	 * Execute the Helm command. Displays all output to the command line and returns a MojoExecutionException for Helm failures.
 	 * 
-	 * @throws MojoExecutionException
+	 * @throws MojoExecutionException An exception is thrown if the Helm command returns non-0
 	 */
 	public void execute() throws MojoExecutionException {
 		try {

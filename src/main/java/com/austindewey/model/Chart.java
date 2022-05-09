@@ -50,7 +50,7 @@ public class Chart {
 	/**
 	 * Validates the chart object
 	 * 
-	 * @throws MojoExecutionException
+	 * @throws MojoExecutionException An exception is thrown if the chart object fails validation
 	 */
 	public void validate() throws MojoExecutionException {
 		if (repository == null) {

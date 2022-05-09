@@ -22,7 +22,7 @@ public class Repository {
 	/**
 	 * Validates the repository object
 	 * 
-	 * @throws MojoExecutionException
+	 * @throws MojoExecutionException An exception is thrown if the repository fails validation
 	 */
 	public void validate() throws MojoExecutionException {
 		if (name == null && url == null) {
