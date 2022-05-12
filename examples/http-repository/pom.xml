@@ -12,14 +12,20 @@
       <plugin>
         <groupId>com.austindewey</groupId>
         <artifactId>helm-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <configuration>
           <releaseName>example</releaseName>
           <chart>
             <name>nginx</name>
-            <version>9.7.6</version>
+            <version>0.1.0</version>
             <repository>
-              <url>https://charts.bitnami.com/bitnami</url>
+              <url>http://localhost:8080</url>
+              <!--
+              For basic auth, you can set the username and password using the example below.
+              Or (for a better solution), you can provide the HELM_MAVEN_PLUGIN_USERNAME and HELM_MAVEN_PLUGIN_PASSWORD environment variables
+              <username>user</username>
+              <password>pass</password>
+              -->
             </repository>
           </chart>
           <values>

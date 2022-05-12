@@ -12,7 +12,7 @@
       <plugin>
         <groupId>com.austindewey</groupId>
         <artifactId>helm-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <configuration>
           <releaseName>example</releaseName>
           <chart>

@@ -75,6 +75,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		String chartName = chart.getName();
 		String repositoryUrl = chart.getRepository().getUrl();
 		String repositoryName = chart.getRepository().getName();
+		String username = chart.getRepository().getUsername();
+		String password = chart.getRepository().getPassword();
 		String chartVersion = chart.getVersion();
 		
 		switch (chart.getUpgradeType()) {
@@ -83,6 +85,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 					.inlineValues(inlineValues)
 					.valuesFiles(valuesFiles)
 					.version(chartVersion)
+					.username(username)
+					.password(password)
 					.wait(wait)
 					.namespace(namespace)
 					.build()

@@ -38,6 +38,8 @@ The full set of supported parameters are described in the table below:
 | `chart.version` | The Helm chart version to install | No | If not provided, the latest chart version from your repository or registry will be installed |
 | `chart.repository.name` | The name of a chart repository previously added with `helm repo add`. This option is mutually exclusive with `chart.repository.url`. | No, _unless_ you want to reference a Helm chart repository previously added with `helm repo add` | null |
 | `chart.repository.url` | The repository URL. You can pass a remote repository (such as `https://example.com`), an OCI registry (such as `oci://example.com`), or a local filepath (such as `./example-chart`). This option is mutually exclusive with `chart.repository.name`. | **Yes**, _unless_ you are installing a Helm chart from a repository added with `helm repo add`. | null |
+| `chart.repository.username` | The username for authenticating to an HTTP repository via basic auth. Alternatively, you can provide the `HELM_MAVEN_PLUGIN_USERNAME` environment variable | No | null |
+| `chart.repository.password` | The password for authenticating to an HTTP repository via basic auth. Alternatively, you can provide the `HELM_MAVEN_PLUGIN_PASSWORD` environment variable | No | null |
 | `values.files` | A list of values files to apply (similar to using Helm's `--values` flag | No | null |
 | `values.set` | A map of values to set inline (similar to using Helm's `--set` flag | No | null |
 
@@ -65,6 +67,11 @@ Below shows how to provide inline values in the plugin's configuration:
 ```
 
 Providing values can be explored further in [this example](./examples/http-repository).
+
+#### Authentication
+Currently, only basic auth for HTTP repositories is supported using the `chart.repository.username` and `chart.repository.password` settings, or the `HELM_MAVEN_PLUGIN_USERNAME` and `HELM_MAVEN_PLUGIN_PASSWORD` environment variables.
+
+Authentication can be explored further in [this example](./examples/http-repository).
 
 ### The `helm:uninstall` goal
 This goal is used to uninstall (delete) a Helm release from your Kubernetes namespace. It is not bound to a Maven lifecycle, so you can invoke it directly from the command line by running:

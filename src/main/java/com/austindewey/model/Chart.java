@@ -73,6 +73,12 @@ public class Chart {
 			}
 		}
 		
+		if (type != CommandType.UPGRADE_FROM_HTTP_REPOSITORY) {
+			if (repository.getUsername() != null || repository.getPassword() != null) {
+				throw new MojoExecutionException("Repository username and password is only supported for HTTP(s) repositories");
+			}
+		}
+		
 		repository.validate();
 	}
 	
