@@ -1,6 +1,8 @@
 package com.austindewey.model;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.austindewey.helm.CommandType;
 
@@ -15,6 +17,8 @@ public class Chart {
 	private String name;
 	private String version;
 	private Repository repository;
+	
+	private Logger log = LoggerFactory.getLogger(Chart.class);
 	
 	public Chart() {}
 	
@@ -33,17 +37,21 @@ public class Chart {
 		if (repository.getUrl() != null) {
 			String r = repository.getUrl().toLowerCase();
 			if (r.contains("https://") || r.contains("http://")) {
+				log.debug("Repository type: http(s)");
 				return CommandType.UPGRADE_FROM_HTTP_REPOSITORY;
 			}
 			if (r.contains("oci://")) {
+				log.debug("Repository type: oci");
 				return CommandType.UPGRADE_FROM_OCI_REGISTRY;
 			}
 		}
 		
 		if (repository.getName() != null) {
+			log.debug("Repository type: repository added with \"helm repo add\"");
 			return CommandType.UPGRADE_FROM_ADDED_REPOSITORY;
 		}
 		
+		log.debug("Repository type: local chart on file system");
 		return CommandType.UPGRADE_FROM_LOCAL;
 	}
 	
