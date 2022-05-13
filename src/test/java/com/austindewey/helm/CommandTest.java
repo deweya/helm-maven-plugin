@@ -79,7 +79,7 @@ public class CommandTest {
 														.password("pass")
 														.build();
 		
-		String expected = "helm upgrade --install --repo https://charts.example.com test nginx --version 1.0.0 --username user --password pass --pass-credentials --values file1 --values file2 --set service.type=clusterIP --set image.name=nginx:1.0.0 --wait --namespace testns ";
+		String expected = "helm upgrade --install --repo https://charts.example.com test nginx --version 1.0.0 --values file1 --values file2 --set service.type=clusterIP --set image.name=nginx:1.0.0 --wait --namespace testns --username user --password pass --pass-credentials ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
 	

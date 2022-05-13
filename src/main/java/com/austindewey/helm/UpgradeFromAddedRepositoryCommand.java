@@ -1,5 +1,8 @@
 package com.austindewey.helm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * An implementation of Helm upgrade when referencing a chart from a locally added repository (from <i>helm repo add</i>)
  * 
@@ -10,6 +13,8 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 	private final String chartName;
 	private final String version;
 	private final String repositoryName;
+	
+	private Logger log = LoggerFactory.getLogger(UpgradeFromAddedRepositoryCommand.class);
 	
 	public UpgradeFromAddedRepositoryCommand(Builder builder) {
 		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
@@ -25,6 +30,8 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 			command += String.format("--version %s ", version);
 		}
 		command += addUpgradeFlags();
+		
+		log.debug("Helm command: " + command);
 		
 		return command;
 	}

@@ -79,6 +79,8 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		String password = chart.getRepository().getPassword();
 		String chartVersion = chart.getVersion();
 		
+		getLog().info(String.format("Installing/Upgrading release \"%s\"", releaseName));
+		
 		switch (chart.getUpgradeType()) {
 		case UPGRADE_FROM_HTTP_REPOSITORY:
 			new UpgradeFromHttpRepositoryCommand.Builder(releaseName, chartName, repositoryUrl)
@@ -124,6 +126,5 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		default:
 			break;
 		}
-		
 	}
 }

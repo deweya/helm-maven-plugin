@@ -1,5 +1,8 @@
 package com.austindewey.helm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * An implementation of Helm upgrade when referencing a chart from an HTTP(s) repository
  * 
@@ -12,6 +15,8 @@ public class UpgradeFromHttpRepositoryCommand extends BaseUpgradeCommand {
 	private final String url;
 	private final String username;
 	private final String password;
+	
+	private Logger log = LoggerFactory.getLogger(UpgradeFromHttpRepositoryCommand.class);
 	
 	private UpgradeFromHttpRepositoryCommand(Builder builder) {
 		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
@@ -28,10 +33,15 @@ public class UpgradeFromHttpRepositoryCommand extends BaseUpgradeCommand {
 		if (version != null) {
 			command += String.format("--version %s ", version);
 		}
+		command += addUpgradeFlags();
+		
+		String maskedCommand = command;
 		if (username != null && password != null) {
 			command += String.format("--username %s --password %s --pass-credentials ", username, password);
+			maskedCommand += String.format("--username %s --password <masked> --pass-credentials ", username);
 		}
-		command += addUpgradeFlags();
+		
+		log.debug("Helm command: " + maskedCommand);
 		
 		return command;
 	}

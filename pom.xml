@@ -5,7 +5,7 @@
   <groupId>com.austindewey</groupId>
   <artifactId>helm-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.1</version>
   
   <name>Helm Maven Plugin</name>
   <description>A Maven plugin used for installing a Helm chart from a Helm repository to Kubernetes</description>
@@ -76,6 +76,21 @@
       <artifactId>maven-project</artifactId>
       <version>2.2.1</version>
     </dependency>
+	<dependency>
+	  <groupId>org.apache.logging.log4j</groupId>
+	  <artifactId>log4j-api</artifactId>
+	  <version>2.17.2</version>
+	</dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.17.2</version>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -116,6 +131,11 @@
 	        </goals>
 	      </execution>
 	    </executions>
+	  </plugin>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-plugin-plugin</artifactId>
+	    <version>3.6.4</version>
 	  </plugin>
     </plugins>
   </build>

@@ -36,6 +36,8 @@ public class HelmUninstallMojo extends AbstractMojo {
 	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		getLog().info(String.format("Uninstalling release \"%s\"", releaseName));
+		
 		new UninstallCommand.Builder(releaseName)
 				.namespace(namespace)
 				.wait(wait)
