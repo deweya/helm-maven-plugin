@@ -1,1 +1,6 @@
-replicaCount: 3
+containerPort: 8080
+
+probe:
+  enabled: true
+  settings:
+    initialDelaySeconds: 60

@@ -5,7 +5,7 @@
   <groupId>com.austindewey</groupId>
   <artifactId>example</artifactId>
   <packaging>pom</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <build>
     <plugins>
@@ -16,16 +16,10 @@
         <configuration>
           <releaseName>example</releaseName>
           <chart>
-            <name>nginx</name>
-            <version>0.1.0</version>
+            <name>onechart</name>
+            <version>0.36.0</version>
             <repository>
-              <url>http://localhost:8080</url>
-              <!--
-              For basic auth, you can set the username and password using the example below.
-              Or (for a better solution), you can provide the HELM_MAVEN_PLUGIN_USERNAME and HELM_MAVEN_PLUGIN_PASSWORD environment variables
-              <username>user</username>
-              <password>pass</password>
-              -->
+              <url>https://chart.onechart.dev</url>
             </repository>
           </chart>
           <values>
@@ -33,7 +27,8 @@
               <file>example-values.yaml</file>
             </files>
             <set>
-              <service.type>ClusterIP</service.type>
+              <image.repository>docker.io/deweya/spring-demo-app</image.repository>
+              <image.tag>${project.version}</image.tag>
             </set>
           </values>
           <namespace>default</namespace>
