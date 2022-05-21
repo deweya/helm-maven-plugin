@@ -73,6 +73,13 @@ Currently, only basic auth for HTTP repositories is supported using the `chart.r
 
 Authentication can be explored further in [this example](./examples/http-repository).
 
+#### Chart Repository Types
+Based on the parameters you provide, helm-maven-plugin will determine which type of repository you are trying to install from. Below is how the repository type is determined:
+* If the repository URL contains `http://` or `https://`, then the type is **HTTP(S) repository**
+* If the repository URL contains `oci://`, then the type is **OCI registry**
+* If the repository name is provided, then the type is an **Added repository**, or one previously added using `helm repo add`
+* Otherwise, if the above three conditions are not reached, then the type is a **Local chart** on the filesystem
+
 ### The `helm:uninstall` goal
 This goal is used to uninstall (delete) a Helm release from your Kubernetes namespace. It is not bound to a Maven lifecycle, so you can invoke it directly from the command line by running:
 ```
