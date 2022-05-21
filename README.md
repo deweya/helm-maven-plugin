@@ -6,7 +6,7 @@ There are many different Maven plugins that integrate with Helm. However, these 
 
 You might want to use this plugin in an enterprise setting, where DevOps teams often provide Helm charts for developers throughout the enterprise. These Helm charts, when properly maintained, include best practices and enterprise integrations you won't get from a generic Helm chart generator. By using this plugin, you can leverage trusted and maintained Helm charts throughout your development process.
 
-In order to deploy an application with Helm, you need to build a container image. Note that this plugin does _not_ handle builds, since there are already great plugins that can do this (see [JKube](https://www.eclipse.org/jkube/docs), for example). However, once your image is built, you can use this plugin (helm-maven-plugin) to deploy your container image using the Helm chart that you specify.
+In order to deploy an application with Helm, you need to build a container image. Note that this plugin does _not_ handle builds, since there are already great plugins that can do this (see [docker-maven-plugin](https://github.com/fabric8io/docker-maven-plugin), for example). However, once your image is built, you can use this plugin (helm-maven-plugin) to deploy your container image using the Helm chart that you specify.
 
 ## Prerequisites
 You must have Helm installed on your machine in order to use this plugin. For instructions on installing Helm, please see Helm's [installation instructions](https://github.com/helm/helm#install).
