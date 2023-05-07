@@ -8,7 +8,7 @@ package com.austindewey.helm;
 public class UninstallCommand extends BaseCommand {
 
 	private UninstallCommand(Builder builder) {
-		super(builder.getReleaseName(), builder.getNamespace(), builder.getWait());
+		super(builder);
 	}
 	
 	@Override
@@ -19,16 +19,7 @@ public class UninstallCommand extends BaseCommand {
 		return command;
 	}
 	
-	public static class Builder extends BaseBuilder<Builder> {
-		
-		public Builder(String releaseName) {
-			super(releaseName);
-		}
-		
-		@Override
-		Builder getBuilder() {
-			return this;
-		}
+	public static class Builder extends BaseBuilder<Builder, UninstallCommand> {
 		
 		public UninstallCommand build() {
 			UninstallCommand command = new UninstallCommand(this);

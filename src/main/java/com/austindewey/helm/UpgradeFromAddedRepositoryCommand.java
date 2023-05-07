@@ -17,7 +17,7 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 	private Logger log = LoggerFactory.getLogger(UpgradeFromAddedRepositoryCommand.class);
 	
 	public UpgradeFromAddedRepositoryCommand(Builder builder) {
-		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
+		super(builder);
 		this.chartName = builder.chartName;
 		this.version = builder.version;
 		this.repositoryName = builder.repositoryName;
@@ -36,28 +36,27 @@ public class UpgradeFromAddedRepositoryCommand extends BaseUpgradeCommand {
 		return command;
 	}
 	
-	public static class Builder extends BaseUpgradeBuilder<Builder> {
+	public static class Builder extends BaseUpgradeBuilder<Builder, UpgradeFromAddedRepositoryCommand> {
 		
 		private String chartName;
 		private String version;
 		private String repositoryName;
 		
-		public Builder(String releaseName, String chartName, String repositoryName) {
-			super(releaseName);
+		public Builder chartName(String chartName) {
 			this.chartName = chartName;
-			this.repositoryName = repositoryName;
-		}
-		
-		@Override
-		Builder getBuilder() {
 			return this;
 		}
-		
+
 		public Builder version(String version) {
 			this.version = version;
 			return this;
 		}
-		
+
+		public Builder repositoryName(String repositoryName) {
+			this.repositoryName = repositoryName;
+			return this;
+		}
+
 		public UpgradeFromAddedRepositoryCommand build() {
 			return new UpgradeFromAddedRepositoryCommand(this);
 		}

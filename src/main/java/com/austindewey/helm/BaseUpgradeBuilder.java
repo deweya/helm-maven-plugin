@@ -7,35 +7,29 @@ import java.util.Map;
  * A builder object used to build different Helm upgrade commands
  * 
  * @author Austin Dewey
- * @param <T> The type of Helm upgrade builder
+ * @param <B> The type of Helm upgrade builder
+ * @param <C> The type of Helm upgrade command
  */
-public abstract class BaseUpgradeBuilder<T> extends BaseBuilder<T> {
-	
-	private T builder;
+public abstract class BaseUpgradeBuilder<B extends BaseBuilder<B,C>, C extends BaseUpgradeCommand> extends BaseBuilder<B,C> {
 
 	private List<String> valuesFiles;
 	private Map<String,String> inlineValues;
 	
-	public BaseUpgradeBuilder(String releaseName) {
-		super(releaseName);
-		builder = getBuilder();
-	}
-	
-	public T valuesFiles(List<String> valuesFiles) {
+	public B valuesFiles(List<String> valuesFiles) {
 		this.valuesFiles = valuesFiles;
-		return builder;
+		return (B) this;
 	}
-	
-	List<String> getValuesFiles() {
+
+	public List<String> getValuesFiles() {
 		return valuesFiles;
 	}
-	
-	public T inlineValues(Map<String,String> inlineValues) {
+
+	public B inlineValues(Map<String,String> inlineValues) {
 		this.inlineValues = inlineValues;
-		return builder;
+		return (B) this;
 	}
-	
-	Map<String,String> getInlineValues() {
+
+	public Map<String,String> getInlineValues() {
 		return inlineValues;
 	}
 }

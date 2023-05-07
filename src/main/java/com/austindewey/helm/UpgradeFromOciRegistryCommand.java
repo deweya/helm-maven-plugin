@@ -17,7 +17,7 @@ public class UpgradeFromOciRegistryCommand extends BaseUpgradeCommand {
 	private Logger log = LoggerFactory.getLogger(UpgradeFromOciRegistryCommand.class);
 	
 	private UpgradeFromOciRegistryCommand(Builder builder) {
-		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
+		super(builder);
 		this.chartName = builder.chartName;
 		this.version = builder.version;
 		this.url = builder.url;
@@ -36,28 +36,27 @@ public class UpgradeFromOciRegistryCommand extends BaseUpgradeCommand {
 		return command;
 	}
 	
-	public static class Builder extends BaseUpgradeBuilder<Builder> {
+	public static class Builder extends BaseUpgradeBuilder<Builder, UpgradeFromOciRegistryCommand> {
 		
 		private String chartName;
 		private String version;
 		private String url;
-		
-		public Builder(String releaseName, String chartName, String url) {
-			super(releaseName);
+
+		public Builder chartName(String chartName) {
 			this.chartName = chartName;
-			this.url = url;
-		}
-		
-		@Override
-		Builder getBuilder() {
 			return this;
 		}
-		
+
 		public Builder version(String version) {
 			this.version = version;
 			return this;
 		}
-		
+
+		public Builder url(String url) {
+			this.url = url;
+			return this;
+		}
+
 		public UpgradeFromOciRegistryCommand build() {
 			return new UpgradeFromOciRegistryCommand(this);
 		}

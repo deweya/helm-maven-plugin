@@ -14,14 +14,15 @@ public class CommandTest {
 
 	@Test
 	public void givenUninstallCommand_whenNoCommonFlagsPassed_thenCreateMinimumCommand() {
-		UninstallCommand cmd = new UninstallCommand.Builder("test").build();
+		UninstallCommand cmd = new UninstallCommand.Builder().releaseName("test").build();
 		String expected = "helm uninstall test ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
 	
 	@Test
 	public void givenUninstallCommand_whenAllCommonFlagsPassed_thenCreateFullCommand() {
-		UninstallCommand cmd = new UninstallCommand.Builder("test")
+		UninstallCommand cmd = new UninstallCommand.Builder()
+									.releaseName("test")
 									.wait(true)
 									.namespace("testns")
 									.build();
@@ -31,19 +32,26 @@ public class CommandTest {
 	
 	@Test
 	public void givenUpgradeFromAddedRepositoryCommand_whenNoAddedFlagsPassed_thenCreateMinimumCommand() {
-		UpgradeFromAddedRepositoryCommand cmd = new UpgradeFromAddedRepositoryCommand.Builder("test", "nginx", "testrepo").build();
+		UpgradeFromAddedRepositoryCommand cmd = new UpgradeFromAddedRepositoryCommand.Builder()
+														.releaseName("test")
+														.chartName( "nginx")
+														.repositoryName("testrepo")
+														.build();
 		String expected = "helm upgrade --install test testrepo/nginx ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
 	
 	@Test
 	public void givenUpgradeFromAddedRepositoryCommand_whenAllAddedFlagsPassed_thenCreateFullCommand() {
-		Map<String,String> inlineValues = new HashMap<String,String>();
+		Map<String,String> inlineValues = new HashMap<>();
 		inlineValues.put("image.name", "nginx:1.0.0");
 		inlineValues.put("service.type", "clusterIP");
 		List<String> valuesFiles = Arrays.asList("file1", "file2");
 		
-		UpgradeFromAddedRepositoryCommand cmd = new UpgradeFromAddedRepositoryCommand.Builder("test", "nginx", "testrepo")
+		UpgradeFromAddedRepositoryCommand cmd = new UpgradeFromAddedRepositoryCommand.Builder()
+														.releaseName("test")
+														.chartName("nginx")
+														.repositoryName("testrepo")
 														.inlineValues(inlineValues)
 														.valuesFiles(valuesFiles)
 														.version("1.0.0")
@@ -57,19 +65,26 @@ public class CommandTest {
 	
 	@Test
 	public void givenUpgradeFromHttpRepositoryCommand_whenNoAddedFlagsPassed_thenCreateMinimumCommand() {
-		UpgradeFromHttpRepositoryCommand cmd = new UpgradeFromHttpRepositoryCommand.Builder("test", "nginx", "https://charts.example.com").build();
+		UpgradeFromHttpRepositoryCommand cmd = new UpgradeFromHttpRepositoryCommand.Builder()
+														.releaseName("test")
+														.chartName("nginx")
+														.url("https://charts.example.com")
+														.build();
 		String expected = "helm upgrade --install --repo https://charts.example.com test nginx ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
 	
 	@Test
 	public void givenUpgradeFromHttpRepositoryCommand_whenAllAddedFlagsPassed_thenCreateFullCommand() {
-		Map<String,String> inlineValues = new HashMap<String,String>();
+		Map<String,String> inlineValues = new HashMap<>();
 		inlineValues.put("image.name", "nginx:1.0.0");
 		inlineValues.put("service.type", "clusterIP");
 		List<String> valuesFiles = Arrays.asList("file1", "file2");
 		
-		UpgradeFromHttpRepositoryCommand cmd = new UpgradeFromHttpRepositoryCommand.Builder("test", "nginx", "https://charts.example.com")
+		UpgradeFromHttpRepositoryCommand cmd = new UpgradeFromHttpRepositoryCommand.Builder()
+														.releaseName("test")
+														.chartName("nginx")
+														.url("https://charts.example.com")
 														.inlineValues(inlineValues)
 														.valuesFiles(valuesFiles)
 														.version("1.0.0")
@@ -85,19 +100,35 @@ public class CommandTest {
 	
 	@Test
 	public void givenUpgradeFromLocalChartCommand_whenNoAddedFlagsPassed_thenCreateMinimumCommand() {
-		UpgradeFromLocalChartCommand cmd = new UpgradeFromLocalChartCommand.Builder("test", "./local-chart").build();
+		UpgradeFromLocalChartCommand cmd = new UpgradeFromLocalChartCommand.Builder()
+														.releaseName("test")
+														.localPath("./local-chart")
+														.build();
 		String expected = "helm upgrade --install test ./local-chart ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
-	
+
+	@Test
+	public void givenUpgradeFromLocalChartCommand_withContext() {
+		UpgradeFromLocalChartCommand cmd = new UpgradeFromLocalChartCommand.Builder()
+				.releaseName("local-release")
+				.localPath("./local-chart")
+				.context("docker-desktop")
+				.build();
+		String expected = "helm upgrade --install local-release ./local-chart --kube-context docker-desktop ";
+		Assert.assertEquals(expected, cmd.createCommand());
+	}
+
 	@Test
 	public void givenUpgradeFromLocalChartCommand_whenAllAddedFlagsPassed_thenCreateFullCommand() {
-		Map<String,String> inlineValues = new HashMap<String,String>();
+		Map<String,String> inlineValues = new HashMap<>();
 		inlineValues.put("image.name", "nginx:1.0.0");
 		inlineValues.put("service.type", "clusterIP");
 		List<String> valuesFiles = Arrays.asList("file1", "file2");
 		
-		UpgradeFromLocalChartCommand cmd = new UpgradeFromLocalChartCommand.Builder("test", "./local-chart")
+		UpgradeFromLocalChartCommand cmd = new UpgradeFromLocalChartCommand.Builder()
+														.releaseName("test")
+														.localPath("./local-chart")
 														.inlineValues(inlineValues)
 														.valuesFiles(valuesFiles)
 														.wait(true)
@@ -110,19 +141,26 @@ public class CommandTest {
 	
 	@Test
 	public void givenUpgradeFromOciRegistryCommand_whenNoAddedFlagsPassed_thenCreateMinimumCommand() {
-		UpgradeFromOciRegistryCommand cmd = new UpgradeFromOciRegistryCommand.Builder("test", "nginx", "oci://charts.example.com").build();
+		UpgradeFromOciRegistryCommand cmd = new UpgradeFromOciRegistryCommand.Builder()
+														.releaseName("test")
+														.chartName("nginx")
+														.url("oci://charts.example.com")
+														.build();
 		String expected = "helm upgrade --install test oci://charts.example.com/nginx ";
 		Assert.assertEquals(expected, cmd.createCommand());
 	}
 	
 	@Test
 	public void givenUpgradeFromOciRegistryCommand_whenAllAddedFlagsPassed_thenCreateFullCommand() {
-		Map<String,String> inlineValues = new HashMap<String,String>();
+		Map<String,String> inlineValues = new HashMap<>();
 		inlineValues.put("image.name", "nginx:1.0.0");
 		inlineValues.put("service.type", "clusterIP");
 		List<String> valuesFiles = Arrays.asList("file1", "file2");
 		
-		UpgradeFromOciRegistryCommand cmd = new UpgradeFromOciRegistryCommand.Builder("test", "nginx", "oci://charts.example.com")
+		UpgradeFromOciRegistryCommand cmd = new UpgradeFromOciRegistryCommand.Builder()
+														.releaseName("test")
+														.chartName( "nginx")
+														.url("oci://charts.example.com")
 														.inlineValues(inlineValues)
 														.valuesFiles(valuesFiles)
 														.version("1.0.0")

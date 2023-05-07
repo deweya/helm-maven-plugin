@@ -19,7 +19,7 @@ public class UpgradeFromHttpRepositoryCommand extends BaseUpgradeCommand {
 	private Logger log = LoggerFactory.getLogger(UpgradeFromHttpRepositoryCommand.class);
 	
 	private UpgradeFromHttpRepositoryCommand(Builder builder) {
-		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
+		super(builder);
 		this.chartName = builder.chartName;
 		this.version = builder.version;
 		this.url = builder.url;
@@ -46,7 +46,7 @@ public class UpgradeFromHttpRepositoryCommand extends BaseUpgradeCommand {
 		return command;
 	}
 	
-	public static class Builder extends BaseUpgradeBuilder<Builder> {
+	public static class Builder extends BaseUpgradeBuilder<Builder, UpgradeFromHttpRepositoryCommand> {
 		
 		private String chartName;
 		private String version;
@@ -54,19 +54,18 @@ public class UpgradeFromHttpRepositoryCommand extends BaseUpgradeCommand {
 		private String username;
 		private String password;
 		
-		public Builder(String releaseName, String chartName, String url) {
-			super(releaseName);
+		public Builder chartName(String chartName) {
 			this.chartName = chartName;
-			this.url = url;
-		}
-		
-		@Override
-		Builder getBuilder() {
 			return this;
 		}
-		
+
 		public Builder version(String version) {
 			this.version = version;
+			return this;
+		}
+
+		public Builder url(String url) {
+			this.url = url;
 			return this;
 		}
 		

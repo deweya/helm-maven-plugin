@@ -15,13 +15,15 @@ public abstract class BaseCommand {
 	final String releaseName;
 	final String namespace;
 	final boolean wait;
-	
-	public BaseCommand(String releaseName, String namespace, boolean wait) {
-		this.releaseName = releaseName;
-		this.namespace = namespace;
-		this.wait = wait;
+	final String context;
+
+	public BaseCommand(BaseBuilder<?, ? extends BaseCommand> builder) {
+		this.releaseName = builder.getReleaseName();
+		this.namespace = builder.getNamespace();
+		this.wait = builder.getWait();
+		this.context = builder.getContext();
 	}
-	
+
 	/**
 	 * Generates the Helm command string for the implementing class
 	 * 
@@ -43,7 +45,9 @@ public abstract class BaseCommand {
 		if (namespace != null) {
 			flags += String.format("--namespace %s ", namespace);
 		}
-		
+		if (context != null) {
+			flags += String.format("--kube-context %s ", context);
+		}
 		return flags;
 	}
 	
