@@ -5,42 +5,51 @@ package com.austindewey.helm;
  * Contains the common set of fields for all Helm command builders
  * 
  * @author Austin Dewey
- * @param <T> The type of builder
+ * @param <B> The type of builder
+ * @param <C> The type of command
  */
-public abstract class BaseBuilder<T> {
-	
-	private T builder;
+public abstract class BaseBuilder<B extends BaseBuilder<B,C>, C extends BaseCommand> {
 
 	private String releaseName;
 	private String namespace;
 	private boolean wait;
-	
-	public BaseBuilder(String releaseName) {
+	private String context;
+
+	public B releaseName(String releaseName) {
 		this.releaseName = releaseName;
-		builder = getBuilder();
+		return (B)this;
 	}
-	
-	abstract T getBuilder();
-	
-	public T namespace(String namespace) {
+
+	public B namespace(String namespace) {
 		this.namespace = namespace;
-		return builder;
+		return (B)this;
 	}
 	
-	public T wait(boolean wait) {
+	public B wait(boolean wait) {
 		this.wait = wait;
-		return builder;
+		return (B)this;
 	}
-	
-	String getReleaseName() {
+
+	public B context(String  context) {
+		this.context = context;
+		return (B)this;
+	}
+
+	public String getReleaseName() {
 		return releaseName;
 	}
-	
-	String getNamespace() {
+
+	public String getNamespace() {
 		return namespace;
 	}
-	
-	boolean getWait() {
+
+	public boolean getWait() {
 		return wait;
 	}
+
+	public String getContext() {
+		return context;
+	}
+
+	public abstract C build();
 }

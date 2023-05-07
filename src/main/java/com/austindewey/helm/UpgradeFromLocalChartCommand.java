@@ -15,7 +15,7 @@ public class UpgradeFromLocalChartCommand extends BaseUpgradeCommand {
 	private Logger log = LoggerFactory.getLogger(UpgradeFromLocalChartCommand.class);
 	
 	private UpgradeFromLocalChartCommand(Builder builder) {
-		super(builder.getReleaseName(), builder.getValuesFiles(), builder.getInlineValues(), builder.getWait(), builder.getNamespace());
+		super(builder);
 		this.localPath = builder.localPath;
 	}
 	
@@ -29,20 +29,15 @@ public class UpgradeFromLocalChartCommand extends BaseUpgradeCommand {
 		return command;
 	}
 	
-	public static class Builder extends BaseUpgradeBuilder<Builder> {
+	public static class Builder extends BaseUpgradeBuilder<Builder, UpgradeFromLocalChartCommand> {
 		
 		private String localPath;
-		
-		public Builder(String releaseName, String localPath) {
-			super(releaseName);
+
+		public Builder localPath(String localPath) {
 			this.localPath = localPath;
-		}
-		
-		@Override
-		Builder getBuilder() {
 			return this;
 		}
-		
+
 		public UpgradeFromLocalChartCommand build() {
 			return new UpgradeFromLocalChartCommand(this);
 		}

@@ -21,10 +21,10 @@ public abstract class BaseUpgradeCommand extends BaseCommand {
 	 */
 	final Map<String,String> inlineValues;
 	
-	public BaseUpgradeCommand(String releaseName, List<String> valuesFiles, Map<String,String> inlineValues, boolean wait, String namespace) {
-		super(releaseName, namespace, wait);
-		this.valuesFiles = valuesFiles;
-		this.inlineValues = inlineValues;
+	public BaseUpgradeCommand(BaseUpgradeBuilder<?, ? extends BaseUpgradeCommand> builder) {
+		super(builder);
+		this.valuesFiles = builder.getValuesFiles();
+		this.inlineValues = builder.getInlineValues();
 	}
 	
 	/**

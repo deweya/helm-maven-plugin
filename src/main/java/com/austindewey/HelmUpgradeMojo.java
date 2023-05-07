@@ -60,6 +60,12 @@ public class HelmUpgradeMojo extends AbstractMojo {
 	@Parameter(property = "namespace")
 	private String namespace;
 
+	/**
+	 * The Kubernetes context
+	 */
+	@Parameter(property = "context")
+	private String context;
+
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		chart.validate();
@@ -83,7 +89,11 @@ public class HelmUpgradeMojo extends AbstractMojo {
 		
 		switch (chart.getUpgradeType()) {
 		case UPGRADE_FROM_HTTP_REPOSITORY:
-			new UpgradeFromHttpRepositoryCommand.Builder(releaseName, chartName, repositoryUrl)
+
+			new UpgradeFromHttpRepositoryCommand.Builder()
+					.releaseName(releaseName)
+					.chartName(chartName)
+					.url(repositoryUrl)
 					.inlineValues(inlineValues)
 					.valuesFiles(valuesFiles)
 					.version(chartVersion)
@@ -95,7 +105,10 @@ public class HelmUpgradeMojo extends AbstractMojo {
 					.execute();
 			break;
 		case UPGRADE_FROM_OCI_REGISTRY:
-			new UpgradeFromOciRegistryCommand.Builder(releaseName, chartName, repositoryUrl)
+			new UpgradeFromOciRegistryCommand.Builder()
+					.releaseName(releaseName)
+					.chartName(chartName)
+					.url(repositoryUrl)
 					.inlineValues(inlineValues)
 					.valuesFiles(valuesFiles)
 					.version(chartVersion)
@@ -105,7 +118,10 @@ public class HelmUpgradeMojo extends AbstractMojo {
 					.execute();
 			break;
 		case UPGRADE_FROM_ADDED_REPOSITORY:
-			new UpgradeFromAddedRepositoryCommand.Builder(releaseName, chartName, repositoryName)
+			new UpgradeFromAddedRepositoryCommand.Builder()
+					.releaseName(releaseName)
+					.chartName(chartName)
+					.repositoryName(repositoryName)
 					.inlineValues(inlineValues)
 					.valuesFiles(valuesFiles)
 					.version(chartVersion)
@@ -115,7 +131,9 @@ public class HelmUpgradeMojo extends AbstractMojo {
 					.execute();
 			break;
 		case UPGRADE_FROM_LOCAL:
-			new UpgradeFromLocalChartCommand.Builder(releaseName, repositoryUrl)
+			new UpgradeFromLocalChartCommand.Builder()
+					.releaseName(releaseName)
+					.localPath(repositoryUrl)
 					.inlineValues(inlineValues)
 					.valuesFiles(valuesFiles)
 					.wait(wait)
